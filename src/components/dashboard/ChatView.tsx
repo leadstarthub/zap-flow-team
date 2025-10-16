@@ -3,47 +3,26 @@ import { Send, Paperclip, Smile, ShoppingBag, Phone, Video, MoreVertical } from 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-
-interface Message {
-  id: string;
-  text: string;
-  sender: "user" | "customer";
-  time: string;
-}
-
-const mockMessages: Message[] = [
-  {
-    id: "1",
-    text: "Olá! Gostaria de conhecer os produtos disponíveis",
-    sender: "customer",
-    time: "10:25",
-  },
-  {
-    id: "2",
-    text: "Olá Maria! Claro, vou abrir nosso catálogo para você",
-    sender: "user",
-    time: "10:26",
-  },
-  {
-    id: "3",
-    text: "Estou procurando algo específico para presente",
-    sender: "customer",
-    time: "10:28",
-  },
-];
+import { Message } from "@/pages/Dashboard";
 
 interface Props {
   chatId: string | null;
   onToggleCatalog: () => void;
   showCatalog: boolean;
+  messages: Message[];
+  onSendMessage: (message: Omit<Message, "id" | "time">) => void;
 }
 
-const ChatView = ({ chatId, onToggleCatalog, showCatalog }: Props) => {
+const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessage }: Props) => {
   const [messageText, setMessageText] = useState("");
 
   const handleSendMessage = () => {
     if (messageText.trim()) {
-      // Handle send message logic
+      onSendMessage({
+        text: messageText,
+        sender: "user",
+        type: "text",
+      });
       setMessageText("");
     }
   };
@@ -91,7 +70,7 @@ const ChatView = ({ chatId, onToggleCatalog, showCatalog }: Props) => {
 
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-6 space-y-4">
-        {mockMessages.map((message) => (
+        {messages.map((message) => (
           <div
             key={message.id}
             className={`flex ${
@@ -105,7 +84,24 @@ const ChatView = ({ chatId, onToggleCatalog, showCatalog }: Props) => {
                   : "bg-chat-received text-foreground rounded-bl-sm border border-border"
               }`}
             >
-              <p className="text-sm">{message.text}</p>
+              {message.type === "cart" && message.cartData ? (
+                <div className="space-y-2">
+                  <p className="text-sm font-semibold mb-3">🛒 Carrinho de Produtos:</p>
+                  {message.cartData.items.map((item, idx) => (
+                    <div key={idx} className="text-sm pb-2 border-b border-border/50 last:border-0">
+                      <p className="font-medium">{item.name}</p>
+                      <p className="text-xs opacity-90">
+                        Quantidade: {item.quantity} × R$ {item.price.toFixed(2)} = R$ {(item.quantity * item.price).toFixed(2)}
+                      </p>
+                    </div>
+                  ))}
+                  <p className="text-sm font-bold pt-2">
+                    Total: R$ {message.cartData.totalPrice.toFixed(2)}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-sm">{message.text}</p>
+              )}
               <p
                 className={`text-xs mt-1 ${
                   message.sender === "user"

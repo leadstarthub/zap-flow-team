@@ -56,9 +56,10 @@ interface CartItem {
 
 interface Props {
   onClose: () => void;
+  onSendToChat: (message: any) => void;
 }
 
-const ProductCatalog = ({ onClose }: Props) => {
+const ProductCatalog = ({ onClose, onSendToChat }: Props) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [cart, setCart] = useState<CartItem[]>([]);
 
@@ -102,6 +103,20 @@ const ProductCatalog = ({ onClose }: Props) => {
       toast.error("Adicione produtos ao carrinho");
       return;
     }
+    
+    onSendToChat({
+      sender: "user",
+      type: "cart",
+      cartData: {
+        items: cart.map(item => ({
+          name: item.product.name,
+          quantity: item.quantity,
+          price: item.product.price,
+        })),
+        totalPrice: totalPrice,
+      },
+    });
+    
     toast.success("Produtos enviados para o chat!");
     setCart([]);
   };
