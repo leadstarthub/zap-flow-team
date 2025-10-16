@@ -68,12 +68,12 @@ const TeamDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">
-                  Taxa de Conversão
+                  Clientes Ativos
                 </p>
-                <p className="text-3xl font-bold text-foreground">24.5%</p>
+                <p className="text-3xl font-bold text-foreground">287</p>
               </div>
               <div className="w-12 h-12 bg-accent rounded-xl flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-accent-foreground" />
+                <Users className="w-6 h-6 text-accent-foreground" />
               </div>
             </div>
           </Card>
