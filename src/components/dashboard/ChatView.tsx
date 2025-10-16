@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Send, Paperclip, Smile, ShoppingBag, Phone, Video, MoreVertical } from "lucide-react";
+import { Send, Paperclip, Smile, ShoppingBag, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -56,11 +56,12 @@ const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessag
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon">
-            <Phone className="w-5 h-5" />
-          </Button>
-          <Button variant="ghost" size="icon">
-            <Video className="w-5 h-5" />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onToggleCatalog}
+          >
+            <ShoppingBag className={`w-5 h-5 ${showCatalog ? "text-primary" : ""}`} />
           </Button>
           <Button variant="ghost" size="icon">
             <MoreVertical className="w-5 h-5" />
@@ -124,14 +125,6 @@ const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessag
           </Button>
           <Button variant="ghost" size="icon" className="shrink-0">
             <Smile className="w-5 h-5" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="shrink-0"
-            onClick={onToggleCatalog}
-          >
-            <ShoppingBag className={`w-5 h-5 ${showCatalog ? "text-primary" : ""}`} />
           </Button>
 
           <Input
