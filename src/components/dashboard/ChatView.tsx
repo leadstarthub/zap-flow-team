@@ -3,6 +3,7 @@ import { Send, Paperclip, Smile, ShoppingBag, MoreVertical } from "lucide-react"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Message } from "@/pages/Dashboard";
 
 interface Props {
@@ -15,6 +16,9 @@ interface Props {
 
 const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessage }: Props) => {
   const [messageText, setMessageText] = useState("");
+  const [emojiOpen, setEmojiOpen] = useState(false);
+
+  const emojis = ["😊", "😂", "❤️", "👍", "🎉", "🔥", "✨", "💯", "👏", "🙏", "😍", "🤔", "😎", "🚀", "💪", "🌟", "😢", "😅", "🤗", "👌"];
 
   const handleSendMessage = () => {
     if (messageText.trim()) {
@@ -25,6 +29,15 @@ const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessag
       });
       setMessageText("");
     }
+  };
+
+  const handleEmojiSelect = (emoji: string) => {
+    onSendMessage({
+      text: emoji,
+      sender: "user",
+      type: "emoji",
+    });
+    setEmojiOpen(false);
   };
 
   if (!chatId) {
@@ -123,9 +136,27 @@ const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessag
           <Button variant="ghost" size="icon" className="shrink-0">
             <Paperclip className="w-5 h-5" />
           </Button>
-          <Button variant="ghost" size="icon" className="shrink-0">
-            <Smile className="w-5 h-5" />
-          </Button>
+          <Popover open={emojiOpen} onOpenChange={setEmojiOpen}>
+            <PopoverTrigger asChild>
+              <Button variant="ghost" size="icon" className="shrink-0">
+                <Smile className="w-5 h-5" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-64 p-2">
+              <div className="grid grid-cols-5 gap-2">
+                {emojis.map((emoji, index) => (
+                  <Button
+                    key={index}
+                    variant="ghost"
+                    className="h-10 w-10 text-2xl hover:bg-accent p-0"
+                    onClick={() => handleEmojiSelect(emoji)}
+                  >
+                    {emoji}
+                  </Button>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
 
           <Input
             placeholder="Digite uma mensagem..."
