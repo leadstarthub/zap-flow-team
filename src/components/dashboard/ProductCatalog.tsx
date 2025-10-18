@@ -125,7 +125,7 @@ const ProductCatalog = ({ onClose, onSendToChat }: Props) => {
     <div className="w-96 border-l border-border bg-card flex flex-col shadow-lg">
       {/* Header */}
       <div className="p-4 border-b border-border flex items-center justify-between bg-card sticky top-0 z-10">
-        <h2 className="text-lg font-bold text-foreground">Catálogo de Produtos</h2>
+        <h2 className="text-lg font-bold text-foreground">Produtos</h2>
         <Button variant="ghost" size="icon" onClick={onClose}>
           <X className="w-5 h-5" />
         </Button>
@@ -228,15 +228,15 @@ const ProductCatalog = ({ onClose, onSendToChat }: Props) => {
           <div className="space-y-3">
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Itens:</span>
-                <span className="font-semibold text-foreground">
-                  {cart.reduce((sum, item) => sum + item.quantity, 0)}
+                <span className="text-foreground font-semibold">SUBTOTAL:</span>
+                <span className="font-bold text-foreground">
+                  R$ {totalPrice.toFixed(2)}
                 </span>
               </div>
-              <div className="flex justify-between">
-                <span className="font-semibold text-foreground">Total:</span>
-                <span className="text-xl font-bold text-primary">
-                  R$ {totalPrice.toFixed(2)}
+              <div className="flex justify-between text-sm">
+                <span className="text-foreground font-semibold">DESCONTO:</span>
+                <span className="font-semibold text-success">
+                  R$ 0,00
                 </span>
               </div>
             </div>

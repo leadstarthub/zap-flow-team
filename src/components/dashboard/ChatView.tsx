@@ -99,19 +99,31 @@ const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessag
               }`}
             >
               {message.type === "cart" && message.cartData ? (
-                <div className="space-y-2">
-                  <p className="text-sm font-semibold mb-3">🛒 Carrinho de Produtos:</p>
+                <div className="space-y-3">
+                  <div className="border-b border-border/30 pb-2">
+                    <p className="text-sm font-bold text-foreground">Produtos:</p>
+                  </div>
                   {message.cartData.items.map((item, idx) => (
-                    <div key={idx} className="text-sm pb-2 border-b border-border/50 last:border-0">
-                      <p className="font-medium">{item.name}</p>
-                      <p className="text-xs opacity-90">
-                        Quantidade: {item.quantity} × R$ {item.price.toFixed(2)} = R$ {(item.quantity * item.price).toFixed(2)}
+                    <div key={idx} className="text-sm space-y-1">
+                      <p className="font-medium text-foreground">{item.name}</p>
+                      <p className="text-xs opacity-80 flex justify-between">
+                        <span>-- {item.quantity} x R$ {item.price.toFixed(2)} (UND) =&gt;</span>
+                        <span className="font-semibold">R$ {(item.quantity * item.price).toFixed(2)}</span>
                       </p>
                     </div>
                   ))}
-                  <p className="text-sm font-bold pt-2">
-                    Total: R$ {message.cartData.totalPrice.toFixed(2)}
-                  </p>
+                  <div className="border-t border-border/30 pt-2 space-y-1">
+                    <p className="text-sm flex justify-between">
+                      <span className="font-semibold">Subtotal:</span>
+                      <span className="font-bold">R$ {message.cartData.totalPrice.toFixed(2)}</span>
+                    </p>
+                  </div>
+                  <div className="border-t border-border/30 pt-2">
+                    <p className="text-sm flex justify-between">
+                      <span className="font-bold">TOTAL:</span>
+                      <span className="font-bold text-base">R$ {message.cartData.totalPrice.toFixed(2)}</span>
+                    </p>
+                  </div>
                 </div>
               ) : (
                 <p className="text-sm">{message.text}</p>
