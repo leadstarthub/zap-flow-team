@@ -32,11 +32,7 @@ const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessag
   };
 
   const handleEmojiSelect = (emoji: string) => {
-    onSendMessage({
-      text: emoji,
-      sender: "user",
-      type: "emoji",
-    });
+    setMessageText((prev) => prev + emoji);
     setEmojiOpen(false);
   };
 
