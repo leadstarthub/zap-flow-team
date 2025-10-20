@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, X, Plus, Minus, Send } from "lucide-react";
+import { Search, X, Plus, Minus, Send, ClipboardList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -243,71 +243,74 @@ const ProductCatalog = ({ onClose, onSendToChat }: Props) => {
               </div>
             </div>
 
-            <Dialog open={showSummary} onOpenChange={setShowSummary}>
-              <DialogTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full mb-2"
-                >
-                  Ver Resumo
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-md">
-                <DialogHeader>
-                  <DialogTitle>Resumo do Carrinho</DialogTitle>
-                </DialogHeader>
-                <ScrollArea className="max-h-[400px] pr-4">
-                  <div className="space-y-3">
-                    {cart.map((item) => (
-                      <div
-                        key={item.product.id}
-                        className="flex gap-3 p-3 border border-border rounded-lg"
-                      >
-                        <img
-                          src={item.product.image}
-                          alt={item.product.name}
-                          className="w-16 h-16 object-cover rounded-lg"
-                        />
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-sm">{item.product.name}</h4>
-                          <p className="text-xs text-muted-foreground mb-1">
-                            {item.product.description}
-                          </p>
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm">Qtd: {item.quantity}</span>
-                            <span className="font-bold text-sm">
-                              R$ {(item.product.price * item.quantity).toFixed(2)}
-                            </span>
+            <div className="flex gap-2">
+              <Dialog open={showSummary} onOpenChange={setShowSummary}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="flex-1 gap-2"
+                  >
+                    <ClipboardList className="w-4 h-4" />
+                    Ver Resumo
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Resumo do Carrinho</DialogTitle>
+                  </DialogHeader>
+                  <ScrollArea className="max-h-[400px] pr-4">
+                    <div className="space-y-3">
+                      {cart.map((item) => (
+                        <div
+                          key={item.product.id}
+                          className="flex gap-3 p-3 border border-border rounded-lg"
+                        >
+                          <img
+                            src={item.product.image}
+                            alt={item.product.name}
+                            className="w-16 h-16 object-cover rounded-lg"
+                          />
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-sm">{item.product.name}</h4>
+                            <p className="text-xs text-muted-foreground mb-1">
+                              {item.product.description}
+                            </p>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm">Qtd: {item.quantity}</span>
+                              <span className="font-bold text-sm">
+                                R$ {(item.product.price * item.quantity).toFixed(2)}
+                              </span>
+                            </div>
                           </div>
                         </div>
+                      ))}
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-border space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span className="font-semibold">SUBTOTAL:</span>
+                        <span className="font-bold">R$ {totalPrice.toFixed(2)}</span>
                       </div>
-                    ))}
-                  </div>
-                  <div className="mt-4 pt-4 border-t border-border space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="font-semibold">SUBTOTAL:</span>
-                      <span className="font-bold">R$ {totalPrice.toFixed(2)}</span>
+                      <div className="flex justify-between text-sm">
+                        <span className="font-semibold">DESCONTO:</span>
+                        <span className="font-semibold text-success">R$ 0,00</span>
+                      </div>
+                      <div className="flex justify-between text-lg pt-2 border-t border-border">
+                        <span className="font-bold">TOTAL:</span>
+                        <span className="font-bold">R$ {totalPrice.toFixed(2)}</span>
+                      </div>
                     </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="font-semibold">DESCONTO:</span>
-                      <span className="font-semibold text-success">R$ 0,00</span>
-                    </div>
-                    <div className="flex justify-between text-lg pt-2 border-t border-border">
-                      <span className="font-bold">TOTAL:</span>
-                      <span className="font-bold">R$ {totalPrice.toFixed(2)}</span>
-                    </div>
-                  </div>
-                </ScrollArea>
-              </DialogContent>
-            </Dialog>
+                  </ScrollArea>
+                </DialogContent>
+              </Dialog>
 
-            <Button
-              className="w-full bg-success hover:bg-success/90 text-success-foreground gap-2"
-              onClick={handleSendToChat}
-            >
-              <Send className="w-4 h-4" />
-              Enviar
-            </Button>
+              <Button
+                className="flex-1 bg-success hover:bg-success/90 text-success-foreground gap-2"
+                onClick={handleSendToChat}
+              >
+                <Send className="w-4 h-4" />
+                Enviar
+              </Button>
+            </div>
           </div>
         </div>
       )}
