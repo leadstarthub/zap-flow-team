@@ -6,20 +6,34 @@ import { Label } from "@/components/ui/label";
 import { MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 
-const Login = () => {
+const Signup = () => {
   const navigate = useNavigate();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock login - in production, this would call your auth API
-    if (email && password) {
-      toast.success("Login realizado com sucesso!");
-      navigate("/dashboard");
-    } else {
+    
+    if (!name || !email || !password || !confirmPassword) {
       toast.error("Preencha todos os campos");
+      return;
     }
+
+    if (password !== confirmPassword) {
+      toast.error("As senhas não coincidem");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("A senha deve ter pelo menos 6 caracteres");
+      return;
+    }
+
+    // Mock signup - in production, this would call your auth API
+    toast.success("Conta criada com sucesso!");
+    navigate("/dashboard");
   };
 
   return (
@@ -30,13 +44,25 @@ const Login = () => {
             <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-hover rounded-2xl flex items-center justify-center mb-4 shadow-lg">
               <MessageSquare className="w-8 h-8 text-primary-foreground" />
             </div>
-            <h1 className="text-3xl font-bold text-foreground">Zap</h1>
+            <h1 className="text-3xl font-bold text-foreground">Criar Conta</h1>
             <p className="text-muted-foreground mt-2 text-center">
-              Plataforma de Vendas WhatsApp
+              Comece a vender pelo WhatsApp
             </p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleSignup} className="space-y-5">
+            <div className="space-y-2">
+              <Label htmlFor="name">Nome Completo</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Seu nome"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="h-11"
+              />
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -61,18 +87,30 @@ const Login = () => {
               />
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirmar Senha</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="h-11"
+              />
+            </div>
+
             <Button
               type="submit"
               className="w-full h-11 bg-primary hover:bg-primary-hover transition-all duration-300"
             >
-              Entrar
+              Criar Conta
             </Button>
           </form>
 
           <div className="mt-6 text-center text-sm text-muted-foreground">
-            Não tem uma conta?{" "}
-            <Link to="/signup" className="text-primary hover:underline">
-              Criar conta
+            Já tem uma conta?{" "}
+            <Link to="/login" className="text-primary hover:underline">
+              Fazer login
             </Link>
           </div>
         </div>
@@ -81,4 +119,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
