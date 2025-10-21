@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { Send, Paperclip, Smile, ShoppingBag, MoreVertical } from "lucide-react";
+import { useState, useRef } from "react";
+import { Send, Paperclip, Smile, ShoppingBag, MoreVertical, Upload, File } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Message } from "@/pages/Dashboard";
 
 interface Props {
@@ -17,6 +18,9 @@ interface Props {
 const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessage }: Props) => {
   const [messageText, setMessageText] = useState("");
   const [emojiOpen, setEmojiOpen] = useState(false);
+  const [fileDialogOpen, setFileDialogOpen] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const emojis = ["😊", "😂", "❤️", "👍", "🎉", "🔥", "✨", "💯", "👏", "🙏", "😍", "🤔", "😎", "🚀", "💪", "🌟", "😢", "😅", "🤗", "👌"];
 
@@ -34,6 +38,21 @@ const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessag
   const handleEmojiSelect = (emoji: string) => {
     setMessageText((prev) => prev + emoji);
     setEmojiOpen(false);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setSelectedFiles(Array.from(e.target.files));
+    }
+  };
+
+  const handleFileUpload = () => {
+    if (selectedFiles.length > 0) {
+      // Handle file upload logic here
+      console.log("Uploading files:", selectedFiles);
+      setFileDialogOpen(false);
+      setSelectedFiles([]);
+    }
   };
 
   if (!chatId) {
@@ -141,9 +160,71 @@ const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessag
       {/* Input Area */}
       <div className="border-t border-border bg-card p-4">
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" className="shrink-0">
-            <Paperclip className="w-5 h-5" />
-          </Button>
+          <Dialog open={fileDialogOpen} onOpenChange={setFileDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="icon" className="shrink-0">
+                <Paperclip className="w-5 h-5" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Anexar Arquivos</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <div className="flex flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed border-border p-8 hover:border-primary transition-colors">
+                  <Upload className="w-12 h-12 text-muted-foreground" />
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-foreground mb-1">
+                      Clique para selecionar arquivos
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Todos os tipos de arquivos são suportados
+                    </p>
+                  </div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    onChange={handleFileSelect}
+                    className="hidden"
+                    id="file-upload"
+                  />
+                  <Button
+                    variant="outline"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    Selecionar Arquivos
+                  </Button>
+                </div>
+                
+                {selectedFiles.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium">Arquivos Selecionados:</p>
+                    <div className="space-y-2 max-h-40 overflow-y-auto">
+                      {selectedFiles.map((file, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 p-2 rounded-md bg-accent"
+                        >
+                          <File className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-sm flex-1 truncate">{file.name}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {(file.size / 1024).toFixed(1)} KB
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <Button
+                      onClick={handleFileUpload}
+                      className="w-full"
+                    >
+                      Enviar {selectedFiles.length} arquivo{selectedFiles.length > 1 ? 's' : ''}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
           <Popover open={emojiOpen} onOpenChange={setEmojiOpen}>
             <PopoverTrigger asChild>
               <Button variant="ghost" size="icon" className="shrink-0">
