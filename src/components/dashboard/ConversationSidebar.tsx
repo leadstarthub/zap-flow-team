@@ -45,9 +45,10 @@ const mockConversations: Conversation[] = [
 interface Props {
   selectedChat: string | null;
   onSelectChat: (id: string) => void;
+  onToggleSidebar?: () => void;
 }
 
-const ConversationSidebar = ({ selectedChat, onSelectChat }: Props) => {
+const ConversationSidebar = ({ selectedChat, onSelectChat, onToggleSidebar }: Props) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredConversations = mockConversations.filter((conv) =>
@@ -55,7 +56,7 @@ const ConversationSidebar = ({ selectedChat, onSelectChat }: Props) => {
   );
 
   return (
-    <div className="w-80 border-r border-border bg-sidebar-bg flex flex-col">
+    <div className="w-80 border-r border-border bg-sidebar-bg flex flex-col h-full">
       <div className="p-4 border-b border-border bg-card">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />

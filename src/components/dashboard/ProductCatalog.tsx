@@ -124,7 +124,7 @@ const ProductCatalog = ({ onClose, onSendToChat }: Props) => {
   };
 
   return (
-    <div className="w-96 border-l border-border bg-card flex flex-col shadow-lg">
+    <div className="w-full lg:w-96 lg:border-l border-border bg-card flex flex-col shadow-lg h-full">
       {/* Header */}
       <div className="p-4 border-b border-border flex items-center justify-between bg-card sticky top-0 z-10">
         <h2 className="text-lg font-bold text-foreground">Produtos</h2>

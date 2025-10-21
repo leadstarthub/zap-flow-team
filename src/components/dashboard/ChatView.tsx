@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Send, Paperclip, Smile, ShoppingBag, MoreVertical, Upload, File } from "lucide-react";
+import { Send, Paperclip, Smile, ShoppingBag, MoreVertical, Upload, File, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -10,12 +10,13 @@ import { Message } from "@/pages/Dashboard";
 interface Props {
   chatId: string | null;
   onToggleCatalog: () => void;
+  onToggleSidebar: () => void;
   showCatalog: boolean;
   messages: Message[];
   onSendMessage: (message: Omit<Message, "id" | "time">) => void;
 }
 
-const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessage }: Props) => {
+const ChatView = ({ chatId, onToggleCatalog, onToggleSidebar, showCatalog, messages, onSendMessage }: Props) => {
   const [messageText, setMessageText] = useState("");
   const [emojiOpen, setEmojiOpen] = useState(false);
   const [fileDialogOpen, setFileDialogOpen] = useState(false);
@@ -70,35 +71,44 @@ const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessag
   return (
     <div className="flex-1 flex flex-col bg-chat-bg">
       {/* Chat Header */}
-      <div className="h-16 border-b border-border bg-card px-6 flex items-center justify-between shadow-sm">
-        <div className="flex items-center gap-3">
-          <Avatar className="w-10 h-10">
-            <AvatarFallback className="bg-primary/10 text-primary">
+      <div className="h-16 border-b border-border bg-card px-3 sm:px-6 flex items-center justify-between shadow-sm">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onToggleSidebar}
+            className="lg:hidden h-8 w-8 shrink-0"
+          >
+            <Menu className="w-5 h-5" />
+          </Button>
+          <Avatar className="w-8 h-8 sm:w-10 sm:h-10 shrink-0">
+            <AvatarFallback className="bg-primary/10 text-primary text-xs sm:text-sm">
               MS
             </AvatarFallback>
           </Avatar>
-          <div>
-            <h3 className="font-semibold text-foreground">Maria Santos</h3>
+          <div className="min-w-0">
+            <h3 className="font-semibold text-sm sm:text-base text-foreground truncate">Maria Santos</h3>
             <p className="text-xs text-success">Online</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <Button
             variant="ghost"
             size="icon"
             onClick={onToggleCatalog}
+            className="h-8 w-8 sm:h-9 sm:w-9"
           >
-            <ShoppingBag className={`w-5 h-5 ${showCatalog ? "text-primary" : ""}`} />
+            <ShoppingBag className={`w-4 h-4 sm:w-5 sm:h-5 ${showCatalog ? "text-primary" : ""}`} />
           </Button>
-          <Button variant="ghost" size="icon">
-            <MoreVertical className="w-5 h-5" />
+          <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-9 sm:w-9">
+            <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5" />
           </Button>
         </div>
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-4">
+      <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-3 sm:space-y-4">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -107,7 +117,7 @@ const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessag
             }`}
           >
             <div
-              className={`max-w-[70%] rounded-2xl px-4 py-3 shadow-sm ${
+              className={`max-w-[85%] sm:max-w-[70%] rounded-2xl px-3 sm:px-4 py-2 sm:py-3 shadow-sm ${
                 message.sender === "user"
                   ? "bg-chat-sent text-primary-foreground rounded-br-sm"
                   : "bg-chat-received text-foreground rounded-bl-sm border border-border"
@@ -158,12 +168,12 @@ const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessag
       </div>
 
       {/* Input Area */}
-      <div className="border-t border-border bg-card p-4">
-        <div className="flex items-center gap-3">
+      <div className="border-t border-border bg-card p-2 sm:p-4">
+        <div className="flex items-center gap-1 sm:gap-3">
           <Dialog open={fileDialogOpen} onOpenChange={setFileDialogOpen}>
             <DialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="shrink-0">
-                <Paperclip className="w-5 h-5" />
+              <Button variant="ghost" size="icon" className="shrink-0 h-8 w-8 sm:h-9 sm:w-9">
+                <Paperclip className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
@@ -227,8 +237,8 @@ const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessag
           </Dialog>
           <Popover open={emojiOpen} onOpenChange={setEmojiOpen}>
             <PopoverTrigger asChild>
-              <Button variant="ghost" size="icon" className="shrink-0">
-                <Smile className="w-5 h-5" />
+              <Button variant="ghost" size="icon" className="shrink-0 h-8 w-8 sm:h-9 sm:w-9 hidden sm:flex">
+                <Smile className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-64 p-2">
@@ -257,10 +267,10 @@ const ChatView = ({ chatId, onToggleCatalog, showCatalog, messages, onSendMessag
 
           <Button
             onClick={handleSendMessage}
-            className="shrink-0 bg-primary hover:bg-primary-hover"
+            className="shrink-0 bg-primary hover:bg-primary-hover h-8 w-8 sm:h-9 sm:w-9"
             size="icon"
           >
-            <Send className="w-5 h-5" />
+            <Send className="w-4 h-4 sm:w-5 sm:h-5" />
           </Button>
         </div>
       </div>
